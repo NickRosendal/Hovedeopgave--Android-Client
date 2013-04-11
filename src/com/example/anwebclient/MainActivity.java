@@ -1,9 +1,8 @@
 package com.example.anwebclient;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -18,25 +17,29 @@ public class MainActivity extends Activity implements ObserverPattern_Observer
 {
 
 	Button PUSHDABUTTON;
-	EditText textboxip;
+	EditText textboxIp;
 	CommandClient myCommandClient;
-	String serverIp ="";
+	String serverIp = "";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		textboxip = (EditText) findViewById(R.id.textboxip);
-				
+		textboxIp = (EditText) findViewById(R.id.textboxip);
+
+		final SharedPreferences settings = getPreferences(MODE_PRIVATE);
+		textboxIp.setText(settings.getString("serverIp", "192.168.1.0"));
+
 		PUSHDABUTTON = (Button) findViewById(R.id.pushDaButtonButton);
 		PUSHDABUTTON.setOnClickListener(new OnClickListener()
 		{
-			
+
 			@Override
 			public void onClick(View v)
 			{
-				serverIp = textboxip.getText()+"";
-				connectToCommandServer();
+				settings.edit().putString("serverIp", textboxIp.getText().toString()).commit();
+				connectToCommandServer(textboxIp.getText().toString());
 			}
 		});
 	}
@@ -48,40 +51,38 @@ public class MainActivity extends Activity implements ObserverPattern_Observer
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	private void nextActivity(){
-		Intent newX = new Intent(MainActivity.this, WebListener.class);
-		newX.putExtra("SERVER ADRESS", serverIp);
-		
-		Bundle b = new Bundle();
-		b.putParcelable("CommandClient", myCommandClient);
-		newX.putExtras(b);
-	//	newX.putExtra("commandClient", myCommandClient);
-		startActivity(newX);
+
+	private void startWebListenerActivity()
+	{
+		Intent webListenerIntent = new Intent(MainActivity.this, WebListener.class);
+		startActivity(webListenerIntent);
 	}
-	private void connectToCommandServer(){
 
-	
-			//myCommandClient = CommandClient.INSTANCE;
-			myCommandClient = new CommandClient("10.36.98.82", 5000);
-//	myCommandClient.CommandClientSetup("10.36.98.82", 5000);
-			myCommandClient.registerObserver(this);
-			myCommandClient.send("pending");
+	private void connectToCommandServer(String Adress)
+	{
+		MyApplication mApplication = (MyApplication) getApplicationContext();
+		if (mApplication.getCommandClient() == null)
+		{
+			myCommandClient = new CommandClient(Adress, 5000);
+			mApplication.setCommandClient(myCommandClient);
+		} else
+		{
+			myCommandClient = mApplication.getCommandClient();
+		}
+		myCommandClient.registerObserver(this);
+		myCommandClient.send("pending");
 
-		
-	
 	}
 
 	@Override
 	public void update(String eventData)
 	{
-		if(eventData.equals("connection accepted")){
+		if (eventData.equals("connection accepted"))
+		{
 			myCommandClient.removeObserver(this);
-			nextActivity();
+			startWebListenerActivity();
 		}
 
 	}
-
-
 
 }

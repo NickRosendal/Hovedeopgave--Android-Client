@@ -158,5 +158,11 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 		}
 	}
 
+	public InetAddress getAddress()
+	{
+		return address;
+	}
+
+
 
 }

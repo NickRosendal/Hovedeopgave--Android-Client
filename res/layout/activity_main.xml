@@ -23,6 +23,8 @@
         android:layout_above="@+id/pushDaButtonButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="48dp"
-        android:ems="10" />
+        android:ems="10" 
+        android:inputType="numberDecimal"
+		android:digits="0123456789."/>
 
 </RelativeLayout>
