@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import android.util.Log;
+
 import com.example.designPatterns.ObserverPattern_Subject;
 import com.example.designPatterns.ObserverPattern_Observer;
 
@@ -20,21 +22,24 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 	private ObserverPattern_Observer o = null;
 	private Thread myThread;
 
-	public CommandClient(String address, int port)
+	public CommandClient(String address, int port, ObserverPattern_Observer observer)
 	{
+		o = observer;
 		try
 		{
 			this.address = InetAddress.getByName(address);
 		} catch (UnknownHostException e)
 		{
+
 			e.printStackTrace();
 		}
 		this.port = port;
 		myThread = new Thread(this, "CommandClient");
-		myThread.start();
+		//myThread.start();
+
 	}
 
-	private void connect() throws IOException
+	private void openStreams() throws IOException
 	{
 		socket = new Socket(address, port);
 		socket.setSoTimeout(5000);
@@ -63,6 +68,7 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 					 */
 					catch (SocketException e)
 					{
+
 						this.interrupt();
 					}
 					/*
@@ -71,6 +77,7 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 					 */
 					catch (IOException e)
 					{
+
 					}
 				}
 			}
@@ -105,6 +112,26 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 			}
 		};
 		writerThread.start();
+	}
+
+	public void connect()
+	{
+
+		try
+		{
+			myThread.start();
+		} catch (RuntimeException e)
+		{
+			e.printStackTrace();
+			if (e.getMessage().toString().contains("Thread already started"))
+				notifyObservers("CommandClient is already started");
+			// e.printStackTrace();
+			// if (e.getCause().toString().contains("No route to host"))
+			// {
+
+			// }
+		}
+
 	}
 
 	public void disconnect()
@@ -143,7 +170,8 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 	@Override
 	public void notifyObservers(String eventData)
 	{
-		o.update(eventData);
+		if (this.o != null)
+			o.update(eventData);
 	}
 
 	@Override
@@ -151,10 +179,13 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 	{
 		try
 		{
-			connect();
+			openStreams();
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			if (e.getCause().toString().contains("No route to host"))
+			{
+				notifyObservers("No route to host");
+			}
 		}
 	}
 
@@ -162,7 +193,5 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 	{
 		return address;
 	}
-
-
 
 }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.designPatterns.ObserverPattern_Observer;
 import com.example.webClient.CommandClient;
@@ -61,26 +62,32 @@ public class MainActivity extends Activity implements ObserverPattern_Observer
 	private void connectToCommandServer(String Adress)
 	{
 		MyApplication mApplication = (MyApplication) getApplicationContext();
-		if (mApplication.getCommandClient() == null)
-		{
-			myCommandClient = new CommandClient(Adress, 5000);
-			mApplication.setCommandClient(myCommandClient);
-		} else
-		{
-			myCommandClient = mApplication.getCommandClient();
-		}
+		
+		myCommandClient = new CommandClient(Adress, 5000, this);
+		mApplication.setCommandClient(myCommandClient);
 		myCommandClient.registerObserver(this);
 		myCommandClient.send("pending");
-
+		myCommandClient.connect();
 	}
 
 	@Override
-	public void update(String eventData)
+	public void update(final String eventData)
 	{
 		if (eventData.equals("connection accepted"))
 		{
 			myCommandClient.removeObserver(this);
 			startWebListenerActivity();
+		} else // show what the CommandClient says
+		{
+			this.runOnUiThread(new Runnable()
+			{
+				public void run()
+				{
+					Toast.makeText(MainActivity.this, eventData, Toast.LENGTH_SHORT).show();
+
+				}
+			});
+
 		}
 
 	}

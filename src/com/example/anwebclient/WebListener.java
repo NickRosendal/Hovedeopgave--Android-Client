@@ -24,17 +24,12 @@ public class WebListener extends Activity implements com.example.designPatterns.
 {
 	String videoURL;
 
-	CommandClient myCommandClient = null;
+	CommandClient myCommandClient;
 	com.example.Mjpeg.MjpegView mj;
 	ReadVideoStream myReadVideoStream =new ReadVideoStream();
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-	//s	MjpegView myMv = (MjpegView) findViewById(R.id.mv);
-		//myMv.setMinimumHeight((int)(myMv.getWidth() * 0.75));
-		
-		
-		
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_web_listener);
@@ -66,7 +61,6 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	@Override
 	public void update(String eventData)
 	{
-		// TODO Auto-generated method stub
 		// "video server is ready"
 		// image is ready
 
@@ -76,10 +70,10 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			this.video();
 		} else if (eventData.equals("image is ready"))
 		{
-			image();
+			this.image();
 		} else if (eventData.equals("swipe"))
 		{
-			swipe();
+			this.swipe();
 		}
 	}
 
@@ -121,25 +115,14 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			try
 			{
 				res = httpclient.execute(new HttpGet(URI.create(url[0])));
-				// Log.d(TAG, "2. Request finished, status = " +
-				// res.getStatusLine().getStatusCode());
-				if (res.getStatusLine().getStatusCode() == 401)
-				{
-					// You must turn off camera User Access Control before this
-					// will work
-					return null;
-				}
 				return new MjpegInputStream(res.getEntity().getContent());
-			} catch (ClientProtocolException e)
+			} 
+			catch (ClientProtocolException e)
 			{
 				e.printStackTrace();
-				// Log.d(TAG, "Request failed-ClientProtocolException", e);
-				// Error connecting to camera
 			} catch (IOException e)
 			{
 				e.printStackTrace();
-				// Log.d(TAG, "Request failed-IOException", e);
-				// Error connecting to camera
 			}
 
 			return null;
