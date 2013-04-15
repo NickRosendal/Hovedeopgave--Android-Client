@@ -15,21 +15,59 @@
           android:layout_alignParentTop="true"
           android:layout_weight="0.17" />
 
-      <TextView
-          android:id="@+id/infoTextView"
+      <Button
+          android:id="@+id/debugButton"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/nameTextView"
-          android:layout_alignParentBottom="true"
-          android:layout_marginBottom="18dp"
+          android:layout_alignLeft="@+id/mv"
+          android:layout_alignRight="@+id/mv"
+          android:layout_below="@+id/mv"
+          android:text="debug" />
+
+      <TextView
+          android:id="@+id/textName"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/debugButton"
+          android:layout_alignRight="@+id/debugButton"
+          android:layout_below="@+id/debugButton"
+          android:text="Kim Lindhard" />
+
+      <TextView
+          android:id="@+id/textStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/textName"
+          android:layout_alignRight="@+id/textZip"
+          android:layout_below="@+id/textName"
+          android:layout_marginTop="56dp"
           android:text="BANNED HURRA" />
 
       <TextView
-          android:id="@+id/nameTextView"
+          android:id="@+id/textBirthday"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_above="@+id/infoTextView"
-          android:layout_centerHorizontal="true"
+          android:layout_alignLeft="@+id/textName"
+          android:layout_alignRight="@+id/textName"
+          android:layout_below="@+id/textName"
+          android:text="Kim Lindhard" />
+
+      <TextView
+          android:id="@+id/textZip"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/textBirthday"
+          android:layout_alignRight="@+id/textName"
+          android:layout_below="@+id/textBirthday"
+          android:text="Kim Lindhard" />
+
+      <TextView
+          android:id="@+id/textLastVisit"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/textStatus"
+          android:layout_alignRight="@+id/textZip"
+          android:layout_below="@+id/textZip"
           android:text="Kim Lindhard" />
     
 </RelativeLayout>
