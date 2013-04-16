@@ -1,6 +1,7 @@
 package com.example.anwebclient;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 
 import org.apache.http.HttpResponse;
@@ -10,7 +11,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +22,8 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.Mjpeg.MjpegInputStream;
 import com.example.Mjpeg.MjpegView;
@@ -32,7 +36,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 
 	CommandClient myCommandClient;
 	com.example.Mjpeg.MjpegView mj;
-	ReadVideoStream myReadVideoStream = new ReadVideoStream();
+
 	Button debugButton;
 	TextView name;
 	TextView birthday;
@@ -40,6 +44,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	TextView status;
 	TextView lastvisit;
 	TextView gender;
+	ImageView imageview;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -55,6 +60,8 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		status = (TextView)findViewById(R.id.textStatus);
 		lastvisit = (TextView)findViewById(R.id.textLastVisit);
 		gender = (TextView)findViewById(R.id.textGender);
+		imageview = (ImageView)findViewById(R.id.imageV);
+		
 		
 		debugButton = (Button) findViewById(R.id.debugButton);
 		debugButton.setOnClickListener(new OnClickListener()
@@ -106,12 +113,17 @@ public class WebListener extends Activity implements com.example.designPatterns.
 				{
 
 					video();
+					Log.i("AnWebClient", "video()");
 				} else if (eventData.equals("image is ready"))
 				{
 					image();
+					Log.i("AnWebClient", "image()");
+
 				} else if (eventData.contains("guestInfo"))
 				{
 					swipe(eventData);
+					Log.i("AnWebClient", "swipe()");
+
 				}
 			}
 		});
@@ -173,13 +185,24 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	// video reviced
 	private void video()
 	{
-		myReadVideoStream.execute(videoURL);
+		//ReadVideoStream myReadVideoStream = new ReadVideoStream();
+		//myReadVideoStream.execute(videoURL);
+		new ReadVideoStream().execute(videoURL);
+		Log.i("AnWebClient", "video thread started");
+		
+
+
 	}
 
 	// image recived
 	private void image()
 	{
-		myReadVideoStream.execute(imageURL);
+		//ReadImage readImageStream = new ReadImage();
+		
+		//readImageStream.execute(imageURL);
+		new ReadImage().execute(imageURL);
+		Log.i("AnWebClient", "image thread started");
+
 	}
 
 	private void askForVideo()
@@ -217,12 +240,49 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		protected void onPostExecute(MjpegInputStream result)
 		{
 			// mj.setMinimumHeight((int)(mj.getWidth() * 0.75));
+			imageview.setVisibility(View.INVISIBLE);
+			mj.setVisibility(View.VISIBLE);
 			mj.setMinimumHeight(2000);
 			mj.setSource(result);
 			mj.setDisplayMode(MjpegView.SIZE_BEST_FIT);
 			mj.showFps(true);
 		}
 	}
+	
+	public class ReadImage extends AsyncTask<String, Void, Bitmap>{
+
+		@Override
+		protected Bitmap doInBackground(String... url)
+		{
+			HttpResponse res = null;
+			DefaultHttpClient httpclient = new DefaultHttpClient();
+			try{
+				res = httpclient.execute(new HttpGet(URI.create(url[0])));
+				InputStream inStream = res.getEntity().getContent();
+								
+			    Drawable d = Drawable.createFromStream(inStream, "imagename");
+				Bitmap bitmap = ((BitmapDrawable)d).getBitmap();
+				
+				return bitmap;
+				
+			} catch(Exception E){
+				E.printStackTrace();
+
+			}
+			// TODO Auto-generated method stub
+			return null;
+		}
+		protected void onPostExecute(Bitmap result)
+		{
+			mj.setVisibility(View.INVISIBLE);
+			imageview.setImageBitmap(result);
+			imageview.setVisibility(View.VISIBLE);
+			
+
+		}
+		
+	}
+	
 	/*
 	 * lav en billed async task
 	 * 
