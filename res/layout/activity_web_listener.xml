@@ -34,16 +34,6 @@
           android:text="Kim Lindhard" />
 
       <TextView
-          android:id="@+id/textStatus"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textName"
-          android:layout_alignRight="@+id/textZip"
-          android:layout_below="@+id/textName"
-          android:layout_marginTop="56dp"
-          android:text="BANNED HURRA" />
-
-      <TextView
           android:id="@+id/textBirthday"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -69,5 +59,23 @@
           android:layout_alignRight="@+id/textZip"
           android:layout_below="@+id/textZip"
           android:text="Kim Lindhard" />
+
+      <TextView
+          android:id="@+id/textStatus"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/textZip"
+          android:layout_below="@+id/textLastVisit"
+          android:layout_marginTop="18dp"
+          android:text="BANNED HURRA" />
+
+      <TextView
+          android:id="@+id/textGender"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignLeft="@+id/textLastVisit"
+          android:layout_alignRight="@+id/textLastVisit"
+          android:layout_below="@+id/textLastVisit"
+          android:text="monkey!" />
     
 </RelativeLayout>

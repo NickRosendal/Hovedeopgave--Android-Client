@@ -28,6 +28,7 @@ import com.example.webClient.CommandClient;
 public class WebListener extends Activity implements com.example.designPatterns.ObserverPattern_Observer
 {
 	String videoURL;
+	String imageURL;
 
 	CommandClient myCommandClient;
 	com.example.Mjpeg.MjpegView mj;
@@ -38,6 +39,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	TextView zipcode;
 	TextView status;
 	TextView lastvisit;
+	TextView gender;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +54,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		zipcode = (TextView)findViewById(R.id.textZip);
 		status = (TextView)findViewById(R.id.textStatus);
 		lastvisit = (TextView)findViewById(R.id.textLastVisit);
+		gender = (TextView)findViewById(R.id.textGender);
 		
 		debugButton = (Button) findViewById(R.id.debugButton);
 		debugButton.setOnClickListener(new OnClickListener()
@@ -62,7 +65,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			{
 				if (!(myCommandClient == null))
 				{
-					myCommandClient.send("pretendToSwipe");
+					askForImage();
 				}
 			}
 		});
@@ -79,7 +82,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			myCommandClient.registerObserver(this);
 			mj = (MjpegView) findViewById(R.id.mv);
 			videoURL = "http://" + myCommandClient.getAddress().getHostAddress() + ":8080/GetStream";
-//			askForVideo();
+			imageURL = "http://" + myCommandClient.getAddress().getHostAddress() + ":8080/GetImage";
 		}
 	}
 
@@ -123,8 +126,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	{
 		/*
 		 *  example of guestInfo
-		 * 	guestInfo:name:Kim Lindhard# birthday:1982-07-21# zipcode:2400# status:welcomed# lastVisit:2013-01-02##
-		 * 
+		 *  guestInfo:name:SIGNE JOHANSEN# birthday:1986-12-23# zipcode:3500# sex:Female# status:welcomed# lastVisit:NA##
 		 * 	status can be welcomed or banned 
 		 * 	lastVisit can be a date, or NA if NA its a new guest.
 		 * 
@@ -135,8 +137,9 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		String Name = guestInfoArray[0].substring(guestInfoArray[0].indexOf(":") + 1);
 		String Birthday = guestInfoArray[1].substring(guestInfoArray[1].indexOf(":") + 1);
 		String Zipcode = guestInfoArray[2].substring(guestInfoArray[2].indexOf(":") + 1);
-		String Status = guestInfoArray[3].substring(guestInfoArray[3].indexOf(":") + 1);
-		String LastVisit = guestInfoArray[4].substring(guestInfoArray[4].indexOf(":") + 1);
+		String Gender = guestInfoArray[3].substring(guestInfoArray[3].indexOf(":") + 1);
+		String Status = guestInfoArray[4].substring(guestInfoArray[4].indexOf(":") + 1);
+		String LastVisit = guestInfoArray[5].substring(guestInfoArray[5].indexOf(":") + 1);
 
 
 		if (Status.equals("welcomed"))
@@ -152,7 +155,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			askForVideo();
 		} else
 		{
-			askForVideo();
+			askForImage();
 		}
 
 		
@@ -161,6 +164,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		 zipcode.setText(Zipcode);
 		 status.setText(Status);
 		 lastvisit.setText(LastVisit);
+		 gender.setText(Gender);
 		
 
 
@@ -175,7 +179,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	// image recived
 	private void image()
 	{
-
+		myReadVideoStream.execute(imageURL);
 	}
 
 	private void askForVideo()
@@ -219,4 +223,9 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			mj.showFps(true);
 		}
 	}
+	/*
+	 * lav en billed async task
+	 * 
+	 * lav scroll view
+	 */
 }
