@@ -1,8 +1,13 @@
 package com.example.anwebclient;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Socket;
 import java.net.URI;
+import java.util.Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -72,6 +77,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			{
 				if (!(myCommandClient == null))
 				{
+
 					askForImage();
 				}
 			}
@@ -137,22 +143,75 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	private void swipe(String guestInfo)
 	{
 		/*
+		 * 
+		 * 
+		 * 
 		 * example of guestInfo guestInfo:name:SIGNE JOHANSEN#
 		 * birthday:1986-12-23# zipcode:3500# sex:Female# status:welcomed#
 		 * lastVisit:NA## status can be welcomed or banned lastVisit can be a
 		 * date, or NA if NA its a new guest.
 		 */
+		String guestEvent[];
 
-		guestInfo = guestInfo.substring(guestInfo.indexOf(":") + 1);
-		String guestInfoArray[] = guestInfo.split("#");
+		String guestEventTemp = guestInfo.substring(guestInfo.indexOf("Events"));
+		guestEvent = guestEventTemp.substring(guestEventTemp.indexOf(":") + 1).split("#");
+
+		String guestInfoArray[] = ((String) guestInfo.subSequence(guestInfo.indexOf(":") + 1, guestInfo.indexOf("Events"))).split("#");
+
 		String Name = guestInfoArray[0].substring(guestInfoArray[0].indexOf(":") + 1);
 		String Birthday = guestInfoArray[1].substring(guestInfoArray[1].indexOf(":") + 1);
-		String Zipcode = guestInfoArray[2].substring(guestInfoArray[2].indexOf(":") + 1);
-		String Gender = guestInfoArray[3].substring(guestInfoArray[3].indexOf(":") + 1);
-		String Status = guestInfoArray[4].substring(guestInfoArray[4].indexOf(":") + 1);
-		String LastVisit = guestInfoArray[5].substring(guestInfoArray[5].indexOf(":") + 1);
+		String Gender = guestInfoArray[2].substring(guestInfoArray[2].indexOf(":") + 1);
+		String Zipcode = guestInfoArray[3].substring(guestInfoArray[3].indexOf(":") + 1);
 
-		if (Status.equals("welcomed"))
+		int count = 0;
+
+		Boolean banned = false;
+//Events:Event:dateTime:2013-04-19 09:55:29#Description:Guest Created###
+
+		for (String text : guestEvent)
+		{
+ 
+			// should look for expering date though!.
+			// We need to agree on how a ban event looks
+
+			// DATE TIME, hvorn�r,
+			// DESCRIPTION :
+			// BAN 2014-03-02
+			if (text.contains("BAN"))
+			{
+
+					String date = text.substring(text.indexOf(" ") + 1);
+					int year = Integer.parseInt(date.substring(0, 4));
+					int month = Integer.parseInt(date.substring(5, 7));
+					int day = Integer.parseInt(date.substring(8, 10));
+//					System.out.println("year: " + year + " month: " + month + "day: " + day);
+
+					Date now = new Date();
+					/*
+					 * Parameters year the year, 0 is 1900. 
+					 * month the month, 0 - 11.
+					 * day the day of the month, 1 - 31.
+					 */
+					year = year - 1900;
+					month = month - 1;
+
+					Date bannedTo = new Date(year, month, day);
+
+					if(!bannedTo.before(now)){
+						banned = true;
+
+					}
+			}
+			/*
+			 * 
+			 * her skal laves noget der fylder alle evens i en lille log som dørmanden kan se.
+			 * 
+			 */
+
+			count++;
+		}
+
+		if (banned == false)
 		{
 			status.setBackgroundColor(Color.GREEN);
 		} else
@@ -160,7 +219,7 @@ public class WebListener extends Activity implements com.example.designPatterns.
 			status.setBackgroundColor(Color.RED);
 		}
 
-		if (LastVisit.equals("NA"))
+		if (count == 0)
 		{
 			askForVideo();
 		} else
@@ -171,8 +230,8 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		name.setText(Name);
 		birthday.setText(Birthday);
 		zipcode.setText(Zipcode);
-		status.setText(Status);
-		lastvisit.setText(LastVisit);
+		status.setText(banned + "");
+		// lastvisit.setText(guestEvent[0]);
 		gender.setText(Gender);
 
 	}
@@ -180,10 +239,10 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	// video reviced
 	private void video()
 	{
-//		if (!(myReadVideoStream == null))
-//		{
-//			myReadVideoStream.cancel(true);
-//		}
+		// if (!(myReadVideoStream == null))
+		// {
+		// myReadVideoStream.cancel(true);
+		// }
 		myReadVideoStream = new ReadVideoStream();
 		myReadVideoStream.execute(videoURL);
 
@@ -217,10 +276,11 @@ public class WebListener extends Activity implements com.example.designPatterns.
 	{
 		HttpResponse res;
 		DefaultHttpClient httpclient;
+
 		protected MjpegInputStream doInBackground(String... url)
 		{
-			 res = null;
-			 httpclient = new DefaultHttpClient();
+			res = null;
+			httpclient = new DefaultHttpClient();
 			mj.init(WebListener.this);
 			// Log.d(TAG, "1. Sending http request");
 			try
@@ -242,22 +302,21 @@ public class WebListener extends Activity implements com.example.designPatterns.
 		{
 			// mj.setMinimumHeight((int)(mj.getWidth() * 0.75));
 
-			
-			 imageview.setVisibility(View.INVISIBLE);
-			 mj.setVisibility(View.VISIBLE);
-			 mj.setMinimumHeight(2000);
-			 mj.setSource(result);
-			 mj.setDisplayMode(MjpegView.SIZE_BEST_FIT);
-			 mj.showFps(true);
+			imageview.setVisibility(View.INVISIBLE);
+			mj.setVisibility(View.VISIBLE);
+			mj.setMinimumHeight(2000);
+			mj.setSource(result);
+			mj.setDisplayMode(MjpegView.SIZE_BEST_FIT);
+			mj.showFps(true);
 		}
-//
-//		@Override
-//		protected void onCancelled()
-//		{
-//			res = null;
-//			httpclient=null;
-//			mj.stopPlayback();
-//		}
+		//
+		// @Override
+		// protected void onCancelled()
+		// {
+		// res = null;
+		// httpclient=null;
+		// mj.stopPlayback();
+		// }
 	}
 
 	public class ReadImage extends AsyncTask<String, Void, Bitmap>
@@ -297,9 +356,5 @@ public class WebListener extends Activity implements com.example.designPatterns.
 
 	}
 
-	/*
-	 * lav en billed async task
-	 * 
-	 * lav scroll view
-	 */
+
 }
