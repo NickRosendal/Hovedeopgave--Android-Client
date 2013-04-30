@@ -24,22 +24,25 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int RadioMale=0x7f08000f;
-        public static final int action_settings=0x7f080010;
-        public static final int buttonForSerch=0x7f08000b;
-        public static final int debugButton=0x7f080004;
-        public static final int editTextSerchName=0x7f08000c;
-        public static final int imageV=0x7f080003;
-        public static final int linarLayoutForSearch=0x7f08000d;
+        public static final int ButtonForSearch=0x7f080008;
+        public static final int ButtonSearch=0x7f08000d;
+        public static final int RadioMale=0x7f080012;
+        public static final int action_settings=0x7f080013;
+        public static final int buttonForSerch=0x7f08000e;
+        public static final int buttonNight=0x7f080007;
+        public static final int debugButton=0x7f080003;
+        public static final int editTextSerchName=0x7f08000f;
+        public static final int imageV=0x7f080004;
+        public static final int linarLayoutForSearch=0x7f080010;
         public static final int mv=0x7f080002;
         public static final int pushDaButtonButton=0x7f080000;
-        public static final int radioFemale=0x7f08000e;
-        public static final int textBirthday=0x7f080006;
-        public static final int textGender=0x7f08000a;
-        public static final int textLastVisit=0x7f080008;
-        public static final int textName=0x7f080005;
-        public static final int textStatus=0x7f080009;
-        public static final int textZip=0x7f080007;
+        public static final int radioFemale=0x7f080011;
+        public static final int relativeLayout1=0x7f080006;
+        public static final int tableLayoutForEvents=0x7f080005;
+        public static final int textBirthday=0x7f08000a;
+        public static final int textGender=0x7f08000c;
+        public static final int textName=0x7f080009;
+        public static final int textZip=0x7f08000b;
         public static final int textboxip=0x7f080001;
     }
     public static final class layout {

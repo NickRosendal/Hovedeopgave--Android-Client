@@ -8,79 +8,103 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WebListener" >
 
-      <com.example.Mjpeg.MjpegView
-          android:id="@+id/mv"
-          android:layout_width="fill_parent"
-          android:layout_height="200dip"
-          android:layout_alignParentTop="true"
-          android:layout_weight="0.17" />
-<ImageView
-          android:id="@+id/imageV"
-          android:layout_width="fill_parent"
-          android:layout_height="200dip"
-          android:layout_alignParentTop="true"
-          android:layout_weight="0.17" />
-      <Button
-          android:id="@+id/debugButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/mv"
-          android:layout_alignRight="@+id/mv"
-          android:layout_below="@+id/mv"
-          android:text="debug" />
+    <com.example.Mjpeg.MjpegView
+        android:id="@+id/mv"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/debugButton"
+        android:layout_weight="0.17" />
 
-      <TextView
-          android:id="@+id/textName"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/debugButton"
-          android:layout_alignRight="@+id/debugButton"
-          android:layout_below="@+id/debugButton"
-          android:text="Kim Lindhard" />
+    <ImageView
+        android:id="@+id/imageV"
+        android:layout_width="fill_parent"
+        android:layout_height="200dip"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/debugButton"
+        android:layout_weight="0.17" />
 
-      <TextView
-          android:id="@+id/textBirthday"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textName"
-          android:layout_alignRight="@+id/textName"
-          android:layout_below="@+id/textName"
-          android:text="Kim Lindhard" />
+    <Button
+        android:id="@+id/debugButton"
+        android:layout_width="50dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/mv"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/mv"
+        android:text=" " />
 
-      <TextView
-          android:id="@+id/textZip"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textBirthday"
-          android:layout_alignRight="@+id/textName"
-          android:layout_below="@+id/textBirthday"
-          android:text="Kim Lindhard" />
+    <TableLayout
+        android:id="@+id/tableLayoutForEvents"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignRight="@+id/debugButton"
+        android:layout_below="@+id/mv"
+        android:layout_toRightOf="@+id/relativeLayout1" >
 
-      <TextView
-          android:id="@+id/textLastVisit"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textStatus"
-          android:layout_alignRight="@+id/textZip"
-          android:layout_below="@+id/textZip"
-          android:text="Kim Lindhard" />
+    </TableLayout>
 
-      <TextView
-          android:id="@+id/textStatus"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textZip"
-          android:layout_below="@+id/textLastVisit"
-          android:layout_marginTop="18dp"
-          android:text="BANNED HURRA" />
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="100dip"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tableLayoutForEvents"
+        android:layout_alignLeft="@+id/mv"
+        android:layout_alignTop="@+id/tableLayoutForEvents" >
 
-      <TextView
-          android:id="@+id/textGender"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/textLastVisit"
-          android:layout_alignRight="@+id/textLastVisit"
-          android:layout_below="@+id/textLastVisit"
-          android:text="monkey!" />
-    
+        <Button
+            android:id="@+id/buttonNight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:text="Night" />
+
+        <Button
+            android:id="@+id/ButtonForSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonNight"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:text="Search" />
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="Kim Lindhard" />
+
+        <TextView
+            android:id="@+id/textBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textName"
+            android:text="Kim Lindhard" />
+
+        <TextView
+            android:id="@+id/textZip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/textBirthday"
+            android:text="Kim Lindhard" />
+
+        <TextView
+            android:id="@+id/textGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/ButtonSearch"
+            android:layout_below="@+id/textZip"
+            android:text="monkey!" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
