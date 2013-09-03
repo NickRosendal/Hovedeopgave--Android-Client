@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,33 +19,31 @@ import com.example.webClient.CommandClient;
 public class MainActivity extends Activity implements ObserverPattern_Observer
 {
 
-	Button PUSHDABUTTON;
-	EditText textboxIp;
-	CommandClient myCommandClient;
-	String serverIp = "";
+    private EditText editIpBox;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		// Remove title bar
+		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		textboxIp = (EditText) findViewById(R.id.textboxip);
+		editIpBox = (EditText) findViewById(R.id.textboxip);
 
 		final SharedPreferences settings = getPreferences(MODE_PRIVATE);
-		textboxIp.setText(settings.getString("serverIp", "192.168.1.0"));
+		editIpBox.setText(settings.getString("serverIp", "192.168.1.0"));
 
-		PUSHDABUTTON = (Button) findViewById(R.id.pushDaButtonButton);
-		PUSHDABUTTON.setOnClickListener(new OnClickListener()
-		{
+        Button connectButton = (Button) findViewById(R.id.pushDaButtonButton);
+		connectButton.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v)
-			{
-				settings.edit().putString("serverIp", textboxIp.getText().toString()).commit();
-				connectToCommandServer(textboxIp.getText().toString());
-				Log.i("anwebclient", "connect clicked");
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                settings.edit().putString("serverIp", editIpBox.getText().toString()).commit();
+                connectToCommandServer(editIpBox.getText().toString());
+                Log.i("anwebclient", "connect clicked");
+            }
+        });
 	}
 
 	@Override
@@ -55,17 +54,19 @@ public class MainActivity extends Activity implements ObserverPattern_Observer
 		return true;
 	}
 
-	private void startWebListenerActivity()
+	private void startWebListenerActivity(String in)
 	{
 		Intent webListenerIntent = new Intent(MainActivity.this, WebListener.class);
+		webListenerIntent.putExtra("users", in);
+        webListenerIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(webListenerIntent);
 	}
 
 	private void connectToCommandServer(String Adress)
 	{
 		MyApplication mApplication = (MyApplication) getApplicationContext();
-		
-		myCommandClient = new CommandClient(Adress, 5000, this);
+
+        CommandClient myCommandClient = new CommandClient(Adress, 5000, this);
 		mApplication.setCommandClient(myCommandClient);
 		myCommandClient.registerObserver(this);
 		myCommandClient.send("pending");
@@ -75,10 +76,17 @@ public class MainActivity extends Activity implements ObserverPattern_Observer
 	@Override
 	public void update(final String eventData)
 	{
-		if (eventData.equals("connection accepted"))
+		if (eventData.contains("connection accepted"))
 		{
-			myCommandClient.removeObserver(this);
-			startWebListenerActivity();
+			String userString = "";
+			try{
+			 userString = eventData.substring(eventData.indexOf("#users:")+7);
+			}catch(Exception E){
+				Log.i("exception", "users at connected messed up");
+			}
+			
+			//myCommandClient.removeObserver(this);
+			startWebListenerActivity(userString);
 		} else // show what the CommandClient says
 		{
 			this.runOnUiThread(new Runnable()

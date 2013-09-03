@@ -23,7 +23,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 	public final static int POSITION_UPPER_LEFT = 9;
 	public final static int POSITION_UPPER_RIGHT = 3;
 	public final static int POSITION_LOWER_LEFT = 12;
-	public final static int POSITION_LOWER_RIGHT = 6;
+	private final static int POSITION_LOWER_RIGHT = 6;
 
 	public final static int SIZE_STANDARD = 1;
 	public final static int SIZE_BEST_FIT = 4;
@@ -32,7 +32,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 	private MjpegViewThread thread = null;
 	private MjpegInputStream mIn = null;
 	private boolean showFps = false;
-	private boolean mRun = false;
+	private volatile boolean mRun = false;
 	private boolean surfaceDone = false;
 	private Paint overlayPaint;
 	private int overlayTextColor;
@@ -121,9 +121,9 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 		surfaceDone = true;
 	}
 
-	public void showFps(boolean b)
+	public void showFps()
 	{
-		showFps = b;
+		showFps = false;
 	}
 
 	public void setSource(MjpegInputStream source)
@@ -159,7 +159,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 
 	public class MjpegViewThread extends Thread
 	{
-		private SurfaceHolder mSurfaceHolder;
+		private final SurfaceHolder mSurfaceHolder;
 		private int frameCounter = 0;
 		private long start;
 		private Bitmap ovl;
@@ -239,7 +239,7 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 			{
 				try
 				{
-					Thread.sleep(1);
+//					Thread.sleep(1);
 
 					if (surfaceDone)
 					{
@@ -290,12 +290,14 @@ public class MjpegView extends SurfaceView implements SurfaceHolder.Callback
 						}
 					}
 
-				} catch (InterruptedException ex)
-				{
+//				} catch (InterruptedException ex)
+                } catch (Exception ex)
+
+                {
 					Log.i("AnWebClient", "INTERRUPTED AM GONNA DIE");
 					Thread.currentThread().interrupt();
 					break;
-					
+
 				}
 			}
 

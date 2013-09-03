@@ -8,52 +8,85 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WebSearch" >
 
-    <Button
-        android:id="@+id/buttonForSerch"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:id="@+id/searchScrollView"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/radioGroup"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
+
+        <TableLayout
+            android:id="@+id/searchTableLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </TableLayout>
+    </ScrollView>
+
+    <ImageButton
+        android:id="@+id/buttonForSerch"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Button" />
+        android:layout_alignTop="@+id/radioGroup"
+        android:layout_toRightOf="@+id/editTextSerchName"
+        android:scaleType="fitCenter"
+        android:src="@drawable/search_icon"
+        android:textColor="@android:color/white"
+        android:contentDescription="@string/descriptionForSearchButtonInWebSearch"/>
 
     <EditText
         android:id="@+id/editTextSerchName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/buttonForSerch"
         android:layout_alignBottom="@+id/buttonForSerch"
         android:layout_alignParentLeft="true"
-        android:ems="10" >
+        android:ems="10"
+        android:textColor="@android:color/white"
+        android:textSize="45sp"
+        android:inputType="text">
 
-        <requestFocus />
+        <requestFocus
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </EditText>
 
-    <LinearLayout
-        android:id="@+id/linarLayoutForSearch"
+    <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/radioFemale"
         android:layout_alignLeft="@+id/editTextSerchName"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/buttonForSerch"
-        android:orientation="vertical" >
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/editTextSerchName"
+        android:layout_marginBottom="60dp"
+       >
 
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/RadioMale"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            
+            android:button="@drawable/button_radio"
+            android:checked="true"
+            android:text="@string/maleRadioButtonText"
+            android:textColor="@android:color/white"
+            android:textSize="45sp"
+           />
 
-    <RadioButton
-        android:id="@+id/RadioMale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonForSerch"
-        android:layout_alignLeft="@+id/editTextSerchName"
-        android:text="Male" />
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+                    
+            
+            android:button="@drawable/button_radio"
+            android:text="@string/femaleRadioButtonText"
+            android:textColor="@android:color/white"
+            android:textSize="45sp"
+      
+            android:width="200dp" />
 
-    <RadioButton
-        android:id="@+id/radioFemale"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/RadioMale"
-        android:layout_alignLeft="@+id/RadioMale"
-        android:text="Female" />
+    </RadioGroup>
 
 </RelativeLayout>

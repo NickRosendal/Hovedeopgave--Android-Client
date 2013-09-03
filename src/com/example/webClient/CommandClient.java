@@ -16,11 +16,11 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 	private BufferedReader reader = null;
 	private BufferedWriter writer = null;
 	private InetAddress address = null;
-	private int port;
-	BlockingQueue<String> sendMessageQueue = new LinkedBlockingQueue<String>(64);
-	private Thread readerThead, writerThread = null;
-	private ObserverPattern_Observer o = null;
-	private Thread myThread;
+	private final int port;
+	private final BlockingQueue<String> sendMessageQueue = new LinkedBlockingQueue<String>(64);
+	private Thread readerThead;
+    private ObserverPattern_Observer o = null;
+	private final Thread myThread;
 
 	public CommandClient(String address, int port, ObserverPattern_Observer observer)
 	{
@@ -35,12 +35,13 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 		}
 		this.port = port;
 		myThread = new Thread(this, "CommandClient");
-		//myThread.start();
+		// myThread.start();
 
 	}
 
 	private void openStreams() throws IOException
 	{
+
 		socket = new Socket(address, port);
 		socket.setSoTimeout(5000);
 		reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -65,53 +66,63 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 					/*
 					 * The socket exception is cough if the connection is
 					 * broken, and the thread should be interrupted
+					 * 
+					 * 
+					 * this shit is not true... the statement above just retursn
+					 * null to the observer... there for we have to catch the
+					 * nullpoint exception, in the update statement of the other
+					 * classes.
 					 */
 					catch (SocketException e)
 					{
-
+						notifyObservers("connection broke");
 						this.interrupt();
+						try
+						{
+							Thread.sleep(10);
+						} catch (InterruptedException e1)
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 					/*
 					 * This exception is cough when the time out of the
 					 * "socket buffered reader" is meet, we do nothing :)
 					 */
-					catch (IOException e)
-					{
+					catch (IOException ignored) {}
 
-					}
 				}
 			}
 		};
 		readerThead.start();
 
-		writerThread = new Thread("CommandClient writeThread")
-		{
-			@Override
-			public void run()
-			{
-				try
-				{
-					while (!Thread.currentThread().isInterrupted())
-					{
-						if (!sendMessageQueue.isEmpty())
-						{
-							String msg = sendMessageQueue.poll();
-							msg += "\n";
-							writer.write(msg, 0, msg.length());
-							writer.flush();
-						}
+        Thread writerThread = new Thread("CommandClient writeThread") {
+            @Override
+            public void run() {
+                try {
+                    while (!Thread.currentThread().isInterrupted()) {
+                        if (!sendMessageQueue.isEmpty()) {
+                            String msg = sendMessageQueue.poll();
+                            msg += "\n";
+                            writer.write(msg, 0, msg.length());
+                            writer.flush();
+                        }
 
-					}
-				} catch (SocketException e)
-				{
-					this.interrupt();
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		};
+                    }
+                } catch (SocketException e) {
+                    this.interrupt();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 		writerThread.start();
+	}
+
+	public void interruptReader()
+	{
+		readerThead.interrupt();
 	}
 
 	public void connect()
@@ -123,7 +134,7 @@ public class CommandClient implements ObserverPattern_Subject, Runnable
 		} catch (RuntimeException e)
 		{
 			e.printStackTrace();
-			if (e.getMessage().toString().contains("Thread already started"))
+			if (e.getMessage().contains("Thread already started"))
 				notifyObservers("CommandClient is already started");
 			// e.printStackTrace();
 			// if (e.getCause().toString().contains("No route to host"))

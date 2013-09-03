@@ -3,8 +3,17 @@
 
     <string name="app_name">AnWebClient</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_web_listener">WebListener</string>
     <string name="title_activity_web_search">WebSearch</string>
+    <string name="title_activity_web_night_list">WebNightList</string>
+    <string name="searchImageIcon">SearchImage</string>
+    <string name="nightListImageIcon">nightListImage</string>
+    <string name="connectToServerText">Connect To Server</string>
+    <string name="maleRadioButtonText">Male</string>
+    <string name="femaleRadioButtonText">Female</string>
+    <string name="banButtonText">BAN</string>
+    <string name="descriptionForImageViewGuestImage">User Image</string>
+    <string name="descriptionForBanButton">Button to Ban user with</string>
+    <string name="descriptionForSearchButtonInWebSearch">Button to search for users with</string>
 
 </resources>

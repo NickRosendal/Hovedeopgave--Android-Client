@@ -16,10 +16,8 @@ public class MjpegInputStream extends DataInputStream {
 
     private final byte[] SOI_MARKER = { (byte) 0xFF, (byte) 0xD8 };
     private final byte[] EOF_MARKER = { (byte) 0xFF, (byte) 0xD9 };
-    private final String CONTENT_LENGTH = "Content-Length";
     private final static int HEADER_MAX_LENGTH = 100;
     private final static int FRAME_MAX_LENGTH = 40000 + HEADER_MAX_LENGTH;
-    private int mContentLength = -1;
 
     public MjpegInputStream(InputStream in) {
         super(new BufferedInputStream(in, FRAME_MAX_LENGTH));
@@ -51,6 +49,7 @@ public class MjpegInputStream extends DataInputStream {
         ByteArrayInputStream headerIn = new ByteArrayInputStream(headerBytes);
         Properties props = new Properties();
         props.load(headerIn);
+        String CONTENT_LENGTH = "Content-Length";
         return Integer.parseInt(props.getProperty(CONTENT_LENGTH));
     }   
 
@@ -60,6 +59,7 @@ public class MjpegInputStream extends DataInputStream {
         reset();
         byte[] header = new byte[headerLen];
         readFully(header);
+        int mContentLength;
         try {
             mContentLength = parseContentLength(header);
         } catch (NumberFormatException nfe) { 

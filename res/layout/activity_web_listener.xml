@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/weblistener_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -8,103 +9,146 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".WebListener" >
 
-    <com.example.Mjpeg.MjpegView
-        android:id="@+id/mv"
+    <RelativeLayout
+        android:id="@+id/topcontent"
         android:layout_width="fill_parent"
         android:layout_height="200dip"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/debugButton"
-        android:layout_weight="0.17" />
-
-    <ImageView
-        android:id="@+id/imageV"
-        android:layout_width="fill_parent"
-        android:layout_height="200dip"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/debugButton"
-        android:layout_weight="0.17" />
-
-    <Button
-        android:id="@+id/debugButton"
-        android:layout_width="50dip"
-        android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/mv"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/mv"
-        android:text=" " />
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/mv" >
 
-    <TableLayout
-        android:id="@+id/tableLayoutForEvents"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignRight="@+id/debugButton"
-        android:layout_below="@+id/mv"
-        android:layout_toRightOf="@+id/relativeLayout1" >
+        <com.example.Mjpeg.MjpegView
+            android:id="@+id/mv"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            />
 
-    </TableLayout>
+        <ImageView
+            android:id="@+id/imageV"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:contentDescription="@string/descriptionForImageViewGuestImage"/>
+    </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/relativeLayout1"
-        android:layout_width="100dip"
+        android:id="@+id/bottomConten"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/tableLayoutForEvents"
-        android:layout_alignLeft="@+id/mv"
-        android:layout_alignTop="@+id/tableLayoutForEvents" >
+        android:layout_below="@+id/topcontent" >
 
         <Button
+            android:id="@+id/debugButton"
+            android:layout_width="match_parent"
+            android:layout_height="100dip"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_below="@+id/topcontent"
+            android:alpha="0.5"
+            android:scaleType="fitCenter" />
+
+        <RelativeLayout
+            android:id="@+id/detailsRelativeLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/buttonNight"
+            android:layout_below="@+id/debugButton" >
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true" >
+
+                <TextView
+                    android:id="@+id/textName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:textSize="20sp"
+                    android:text=""
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/textGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/textName"
+                                        android:textSize="20sp"
+                    
+                    android:text=""
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:id="@+id/textBirthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/textGender"
+                                        android:textSize="20sp"
+                    
+                    android:text=""
+                    android:textColor="@android:color/white" />
+
+                <ImageButton
+                    android:id="@+id/banButton"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textBirthday"
+                    android:src="@drawable/adgangforbudt"
+                    android:scaleType="fitCenter"
+                    android:text="@string/banButtonText"
+                    android:textColor="@android:color/white"
+                    android:contentDescription="@string/descriptionForBanButton"/>
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/relativeLayout1"
+                android:fadeScrollbars="false"
+                android:scrollbars="vertical" >
+
+                <TableLayout
+                    android:id="@+id/tableLayoutForEvents"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                        >
+                </TableLayout>
+            </ScrollView>
+        </RelativeLayout>
+
+        <ImageButton
+            android:id="@+id/ButtonForSearch"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/buttonNight"
+            android:scaleType="fitCenter"
+            android:src="@drawable/search_icon"
+            android:contentDescription="@string/searchImageIcon"/>
+
+        <ImageButton
             android:id="@+id/buttonNight"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:text="Night" />
-
-        <Button
-            android:id="@+id/ButtonForSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonNight"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:text="Search" />
-
-        <TextView
-            android:id="@+id/textName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:text="Kim Lindhard" />
-
-        <TextView
-            android:id="@+id/textBirthday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textName"
-            android:text="Kim Lindhard" />
-
-        <TextView
-            android:id="@+id/textZip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textBirthday"
-            android:text="Kim Lindhard" />
-
-        <TextView
-            android:id="@+id/textGender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignRight="@+id/ButtonSearch"
-            android:layout_below="@+id/textZip"
-            android:text="monkey!" />
-
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/night_icon"
+            android:contentDescription="@string/nightListImageIcon"/>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -17,9 +17,9 @@ import android.util.Log;
 
 public class ReciveFile implements com.example.designPatterns.ObserverPattern_Subject, Runnable
 {
-	com.example.designPatterns.ObserverPattern_Observer Observer;
-	String path;
-	String applicationPath;
+	private com.example.designPatterns.ObserverPattern_Observer Observer;
+	private final String path;
+	private final String applicationPath;
 
 	ReciveFile(String applicationPath, String serverAdresse, com.example.designPatterns.ObserverPattern_Observer o)
 	{
@@ -55,20 +55,22 @@ public class ReciveFile implements com.example.designPatterns.ObserverPattern_Su
 		if (inputStream != null)
 		{
 
-			FileOutputStream fos = null;
+			FileOutputStream fos;
 			BufferedOutputStream bos = null;
 			try
 			{
 				Log.i("anwebclient", "starting to read image..");
 
 
-				bytesRead = inputStream.read(aByte, 0, aByte.length);
+                bytesRead = inputStream.read(aByte, 0, aByte.length);
 
-				do
+                do
 				{
 					baos.write(aByte);
 					bytesRead = inputStream.read(aByte);
-				} while (bytesRead != -1);
+
+
+                } while (bytesRead != -1);
 
 				byte[] rawStream = baos.toByteArray();
 
@@ -95,7 +97,8 @@ public class ReciveFile implements com.example.designPatterns.ObserverPattern_Su
 				try
 				{
 					File directory = new File(fileString.substring(0, fileString.lastIndexOf("/")));
-					directory.mkdirs();
+                    //noinspection ResultOfMethodCallIgnored
+                    directory.mkdirs();
 				} catch (Exception E)
 				{
 					Log.i("anwebclient", E.toString());

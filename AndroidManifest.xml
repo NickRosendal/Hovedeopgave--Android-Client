@@ -5,11 +5,12 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="13"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name="com.example.anwebclient.MyApplication"
         android:allowBackup="true"
@@ -18,20 +19,27 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.anwebclient.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.example.anwebclient.WebListener"
-            android:label="@string/title_activity_web_listener" >
+            android:label="@string/title_activity_web_listener"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.example.anwebclient.WebSearch"
-            android:label="@string/title_activity_web_search" >
+            android:label="@string/title_activity_web_search"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.example.anwebclient.WebNightList"
+            android:label="@string/title_activity_web_night_list"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
